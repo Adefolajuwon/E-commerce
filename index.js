@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const authRouter = require('./routes/userRoutes');
 
 app.use((req, res, next) => {
 	res.setHeader('Content-Type', 'application/json');
@@ -16,5 +17,6 @@ app.use(
 // app.use('/setauthtoken', (req, res) => {
 // 	res.send('welcome');
 // });
+app.use('/auth', authRouter);
 
 module.exports = app;
