@@ -24,4 +24,14 @@ async function deleteProduct(id) {
 		throw error;
 	}
 }
-module.export = { saveProduct, deleteProduct };
+async function getProduct(id) {
+	try {
+		const response = await Product.findById(id);
+		if (!response) {
+			res.status(404).json({ error: 'Product not found' });
+		}
+	} catch (error) {
+		console.error('Could not get product');
+	}
+}
+module.export = { saveProduct, deleteProduct, getProduct };

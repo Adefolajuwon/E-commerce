@@ -1,3 +1,8 @@
+const {
+	saveProduct,
+	deleteProduct,
+	getProduct,
+} = require('../models/productModel');
 async function createProduct(req, res) {
 	try {
 		const { name, description, price, category, stockQuantity } = req.body;
@@ -19,11 +24,22 @@ async function createProduct(req, res) {
 }
 async function deleteProduct(req, res) {
 	try {
-	} catch (error) {}
-	const { productId } = req.params;
-	const response = await deleteProduct(productId);
-	res
-		.status(200)
-		.json({ message: 'Product deleted successfully', product: response });
+		const { productId } = req.params;
+		const response = await deleteProduct(productId);
+		res
+			.status(200)
+			.json({ message: 'Product deleted successfully', product: response });
+	} catch (error) {
+		res.status(501).json({ error: 'Internal server error' });
+	}
 }
-module.exports = { createProduct };
+async function getProduct(req, res) {
+	try {
+		const { productId } = req.params;
+		const response = await getProduct(productId);
+		res.status(200).json({ product: response });
+	} catch (error) {
+		res.status(501).json({ error: 'Internal server error' });
+	}
+}
+module.exports = { createProduct, deleteProduct, getProduct };
