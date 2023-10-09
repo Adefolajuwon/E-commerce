@@ -1,6 +1,6 @@
 const Product = require('../schemas/productSchema');
-
-async function saveProduct(product) {
+const { User } = require('../schemas/userSchema');
+async function createProduct(product) {
 	try {
 		const response = await Product.create(product);
 		if (!response) {
@@ -34,4 +34,4 @@ async function getProduct(id) {
 		console.error('Could not get product');
 	}
 }
-module.export = { saveProduct, deleteProduct, getProduct };
+module.export = { createProduct, deleteProduct, getProduct };
