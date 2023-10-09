@@ -10,7 +10,7 @@ mongoose.connection.on('error', (e) => {
 });
 async function startMongoose() {
 	await mongoose.connect(
-		'mongodb+srv://juwon:tremothegoat@cluster0.lary7db.mongodb.net'
+		'mongodb+srv://juwon:tremothegoat@cluster0.lary7db.mongodb.net/E-commerce'
 	);
 }
 

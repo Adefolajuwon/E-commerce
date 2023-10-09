@@ -17,6 +17,6 @@ app.use(
 // app.use('/setauthtoken', (req, res) => {
 // 	res.send('welcome');
 // });
-app.use('/auth', authRouter);
+app.use('/api/auth', authRouter);
 
 module.exports = app;
