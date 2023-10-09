@@ -1,7 +1,7 @@
 const {
-	saveProduct,
-	deleteProduct,
-	getProduct,
+	storeProduct,
+	removeProductById,
+	getProductById,
 } = require('../models/productModel');
 const { User } = require('../schemas/userSchema');
 
@@ -9,7 +9,7 @@ async function createProduct(req, res) {
 	try {
 		// const theUser = User.findById(req.user.id);
 		const { name, description, price, category, stockQuantity } = req.body;
-		const response = await saveProduct({
+		const response = await storeProduct({
 			name,
 			description,
 			price,
@@ -29,7 +29,7 @@ async function createProduct(req, res) {
 async function deleteProduct(req, res) {
 	try {
 		const { productId } = req.params;
-		const response = await deleteProduct(productId);
+		const response = await removeProductById(productId);
 		res
 			.status(200)
 			.json({ message: 'Product deleted successfully', product: response });
@@ -40,10 +40,19 @@ async function deleteProduct(req, res) {
 async function getProduct(req, res) {
 	try {
 		const { productId } = req.params;
-		const response = await getProduct(productId);
-		res.status(200).json({ product: response });
+		const response = await getProductById(productId);
+		if (!response) {
+			return res.status(404).json({ error: 'product not found' });
+		}
+		return res.status(200).json({ product: response });
 	} catch (error) {
+		console.log(error);
 		res.status(501).json({ error: 'Internal server error' });
+		if (error.message === 'Product not found') {
+			return res.status(404).json({ error: 'Product not found' });
+		}
+
+		res.status(500).json({ error: 'Internal server error' });
 	}
 }
 module.exports = { createProduct, deleteProduct, getProduct };

@@ -1,6 +1,6 @@
 const Product = require('../schemas/productSchema');
 const { User } = require('../schemas/userSchema');
-async function createProduct(product) {
+async function storeProduct(product) {
 	try {
 		const response = await Product.create(product);
 		if (!response) {
@@ -12,7 +12,7 @@ async function createProduct(product) {
 		throw error;
 	}
 }
-async function deleteProduct(id) {
+async function removeProductById(id) {
 	try {
 		const response = await Product.findByIdAndDelete(id);
 		if (!response) {
@@ -24,14 +24,19 @@ async function deleteProduct(id) {
 		throw error;
 	}
 }
-async function getProduct(id) {
+async function getProductById(id) {
 	try {
 		const response = await Product.findById(id);
+
 		if (!response) {
-			res.status(404).json({ error: 'Product not found' });
+			throw new Error('Product not found');
 		}
+
+		return response;
 	} catch (error) {
-		console.error('Could not get product');
+		console.error('Error fetching product:', error);
+		throw error;
 	}
 }
-module.export = { createProduct, deleteProduct, getProduct };
+
+module.export = { storeProduct, removeProductById, getProductById };
