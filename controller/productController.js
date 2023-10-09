@@ -8,8 +8,7 @@ const { User } = require('../schemas/userSchema');
 async function createProduct(req, res) {
 	try {
 		// const theUser = User.findById(req.user.id);
-		const { name, description, price, category, stockQuantity, user } =
-			req.body;
+		const { name, description, price, category, stockQuantity } = req.body;
 		const response = await saveProduct({
 			name,
 			description,

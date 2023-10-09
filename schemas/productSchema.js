@@ -25,6 +25,9 @@ const productSchema = new mongoose.Schema({
 		required: true,
 		min: 0,
 	},
+	user: {
+		type: String,
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now,
