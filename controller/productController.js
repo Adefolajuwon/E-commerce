@@ -3,13 +3,21 @@ const {
 	removeProductById,
 	getProductById,
 } = require('../models/productModel');
-const { User } = require('../schemas/userSchema');
+const { body, validationResult } = require('express-validator');
 
+const { User } = require('../schemas/userSchema');
 async function createProduct(req, res) {
 	try {
-		// const theUser = User.findById(req.user.id);
+		// Check for validation errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ errors: errors.array() });
+		}
+
+		// If validation passes, proceed with creating the product
 		const { name, description, price, category, stockQuantity } = req.body;
 		const userId = req.user._id;
+
 		const response = await storeProduct({
 			name,
 			description,
@@ -22,12 +30,12 @@ async function createProduct(req, res) {
 		res
 			.status(201)
 			.json({ message: 'Product created successfully', product: response });
-		console.log(req.user.id);
 	} catch (error) {
 		console.error('Error creating product:', error);
 		res.status(500).json({ error: 'Internal server error' });
 	}
 }
+
 async function deleteProduct(req, res) {
 	try {
 		const { productId } = req.params;
@@ -57,5 +65,6 @@ async function getProduct(req, res) {
 		res.status(500).json({ error: 'Internal server error' });
 	}
 }
+async function updateProduct() {}
 async function getUserProducts(req, res) {}
 module.exports = { createProduct, deleteProduct, getProduct };
