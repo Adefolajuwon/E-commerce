@@ -7,27 +7,31 @@ const jwt = require('jsonwebtoken');
 async function controllerAuthGoogle(req, res, next) {
 	try {
 		if (!req.isAuthenticated()) {
-			res.status(401).json({ error: 'Unauthorized' });
+			return res.status(401).json({ error: 'Unauthorized' });
 		}
+
 		req.session.profile = req.user;
+
 		const user = await storeGoogleUser(req.user);
-		console.log(user);
+		const userId = req.user._id;
 
 		if (user?.error) {
-			res.redirect(`/login?success=false&message=Authentication failed`);
-			return;
+			return res.redirect(`/login?success=false&message=Authentication failed`);
 		}
-		let token = jwt.sign(
-			{ _id: user._id, email: user.email },
+
+		const token = jwt.sign(
+			{ _id: userId, email: user.email },
 			process.env.JWT_SECRET,
 			{ expiresIn: '7d' }
 		);
-		console.log(token);
-		res.redirect(`http://localhost:8000/setauthtoken/${token}`);
+		return res.redirect(`http://localhost:8000/setauthtoken/${token}`);
 	} catch (error) {
-		console.log(error);
-		res.status(501).json(error);
+		console.error('Error in controllerAuthGoogle:', error);
+		// Handle errors with a JSON response
+		return res.status(501).json({ error: 'Internal server error' });
 	}
+	// Ensure that `next()` is called only once, and in the right place
 	next();
 }
+
 module.exports = { controllerAuthGoogle };

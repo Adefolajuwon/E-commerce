@@ -9,13 +9,14 @@ async function createProduct(req, res) {
 	try {
 		// const theUser = User.findById(req.user.id);
 		const { name, description, price, category, stockQuantity } = req.body;
+		const userId = req.user._id;
 		const response = await storeProduct({
 			name,
 			description,
 			price,
 			category,
 			stockQuantity,
-			user: req.user._id,
+			user: userId,
 		});
 
 		res

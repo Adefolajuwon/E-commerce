@@ -41,6 +41,7 @@ async function getProductById(id) {
 		throw error;
 	}
 }
+
 async function getAllUserProducts(id) {
 	try {
 		const response = await Product.where().equals();
