@@ -1,5 +1,6 @@
 const Product = require('../schemas/productSchema');
 const { User } = require('../schemas/userSchema');
+const mongoose = require('mongoose');
 async function storeProduct(product) {
 	try {
 		const response = await Product.create(product);
@@ -26,7 +27,9 @@ async function removeProductById(id) {
 }
 async function getProductById(id) {
 	try {
-		const response = await Product.findById(id);
+		const objectId = new mongoose.Types.ObjectId(id);
+
+		const response = await Product.findById(objectId);
 
 		if (!response) {
 			throw new Error('Product not found');
@@ -38,5 +41,9 @@ async function getProductById(id) {
 		throw error;
 	}
 }
-
-module.export = { storeProduct, removeProductById, getProductById };
+async function getAllUserProducts(id) {
+	try {
+		const response = await Product.where().equals();
+	} catch (error) {}
+}
+module.exports = { storeProduct, removeProductById, getProductById };

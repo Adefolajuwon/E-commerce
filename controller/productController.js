@@ -15,12 +15,13 @@ async function createProduct(req, res) {
 			price,
 			category,
 			stockQuantity,
-			user: req.user.id,
+			user: req.user._id,
 		});
 
 		res
 			.status(201)
 			.json({ message: 'Product created successfully', product: response });
+		console.log(req.user.id);
 	} catch (error) {
 		console.error('Error creating product:', error);
 		res.status(500).json({ error: 'Internal server error' });
@@ -55,4 +56,5 @@ async function getProduct(req, res) {
 		res.status(500).json({ error: 'Internal server error' });
 	}
 }
+async function getUserProducts(req, res) {}
 module.exports = { createProduct, deleteProduct, getProduct };
