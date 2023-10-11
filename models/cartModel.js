@@ -15,7 +15,7 @@ async function addProductToCart(userId, productId) {
 			return updatedCart;
 		}
 	} catch (error) {
-		console.error('Error adding product to cart:', error);
+		console.error('Error adding product to cart;', error);
 		throw error;
 	}
 }
