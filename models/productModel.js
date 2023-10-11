@@ -41,10 +41,30 @@ async function getProductById(id) {
 		throw error;
 	}
 }
+async function updateProductById(id, data) {
+	try {
+		const updatedProduct = await Product.findByIdAndUpdate(id, data, {
+			new: true,
+		});
 
+		if (!updatedProduct) {
+			throw new Error('Product not found');
+		}
+
+		return updatedProduct;
+	} catch (error) {
+		console.error('Error updating product:', error);
+		throw error;
+	}
+}
 async function getAllUserProducts(id) {
 	try {
 		const response = await Product.where().equals();
 	} catch (error) {}
 }
-module.exports = { storeProduct, removeProductById, getProductById };
+module.exports = {
+	storeProduct,
+	removeProductById,
+	getProductById,
+	updateProductById,
+};
