@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const { controllerAuthGoogle } = require('../controller/userController');
-const { passportInstance } = require('../lib/passport');
+const { passport } = require('../lib/passport');
 
 const authRouter = express.Router();
 authRouter.use(
@@ -12,16 +12,14 @@ authRouter.use(
 		saveUninitialized: false,
 	})
 );
-authRouter.use(passportInstance.initialize());
-authRouter.use(passportInstance.session());
 
-authRouter.get(
-	'/google',
-	passportInstance.authenticate('google', { scope: ['email', 'profile'] })
-);
+authRouter.use(passport.initialize());
+authRouter.use(passport.session());
+
+authRouter.get('/google', passport.authenticate('google', { scope: 'email' }));
 authRouter.get(
 	'/google/callback',
-	passportInstance.authenticate('google', { failureRedirect: '/register' }),
+	passport.authenticate('google', { failureRedirect: '/register' }),
 	controllerAuthGoogle
 );
 module.exports = authRouter;

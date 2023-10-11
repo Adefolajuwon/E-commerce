@@ -4,12 +4,13 @@ const User = require('../schemas/userSchema');
 async function storeGoogleUser(user) {
 	try {
 		const { email, provider } = user;
+		const userData = { email, provider }; // Exclude _id field
 
 		let response = await User.findOne({ email });
 		if (!response) {
-			response = await User.create(user);
+			response = await User.create(userData); // Create user without _id
 		} else {
-			response = await User.updateOne({ email }, user);
+			response = await User.updateOne({ email }, userData); // Update user without _id
 		}
 		return response;
 	} catch (error) {

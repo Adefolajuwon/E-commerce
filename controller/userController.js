@@ -11,19 +11,21 @@ async function controllerAuthGoogle(req, res, next) {
 		}
 
 		req.session.profile = req.user;
+		const newUser = await storeGoogleUser(req.user);
 
-		const user = await storeGoogleUser(req.user);
-		const userId = req.user._id;
-
-		if (user?.error) {
+		if (newUser?.error) {
 			return res.redirect(`/login?success=false&message=Authentication failed`);
 		}
+		let payload = {
+			user: {
+				id: newUser.id,
+			},
+		};
 
-		const token = jwt.sign(
-			{ _id: userId, email: user.email },
-			process.env.JWT_SECRET,
-			{ expiresIn: '7d' }
-		);
+		const token = jwt.sign(payload, process.env.JWT_SECRET, {
+			expiresIn: '7d',
+		});
+
 		return res.redirect(`http://localhost:8000/setauthtoken/${token}`);
 	} catch (error) {
 		console.error('Error in controllerAuthGoogle:', error);

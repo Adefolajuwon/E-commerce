@@ -11,15 +11,14 @@ const fetchUser = async (req, res, next) => {
 	const token = auth.split(' ')[1];
 	try {
 		const payload = jwt.verify(token, JWT_SECRET);
-		req.user = payload;
-		console.log(payload);
+		// Assuming your user data is stored in `payload.user`
+		req.user = payload.user;
+		console.log(req.user); // This should now log the user data
 		next();
 	} catch (error) {
 		console.error(error);
 		return res.status(401).json({ error: 'Invalid token' });
 	}
 };
-
-module.exports = fetchUser;
 
 module.exports = { fetchUser };

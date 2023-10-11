@@ -23,6 +23,10 @@ const productSchema = new mongoose.Schema({
 	},
 	user: {
 		type: String,
+		// required: true,
+	},
+	email: {
+		type: String,
 	},
 	createdAt: {
 		type: Date,

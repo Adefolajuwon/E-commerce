@@ -16,14 +16,14 @@ async function createProduct(req, res) {
 		}
 
 		const { name, description, price, stockQuantity } = req.body;
-		const userId = req.user._id;
+		// const userId = req.user.id;
 
 		const response = await storeProduct({
 			name,
 			description,
 			price,
 			stockQuantity,
-			user: userId,
+			user: req.user.id,
 		});
 
 		res
