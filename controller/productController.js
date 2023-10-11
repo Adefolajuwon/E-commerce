@@ -5,6 +5,7 @@ const {
 	updateProductById,
 	getAllProducts,
 } = require('../models/productModel');
+const { sendSuccess, sendError } = require('./baseController');
 const { body, validationResult } = require('express-validator');
 
 const { User } = require('../schemas/userSchema');
@@ -31,8 +32,7 @@ async function createProduct(req, res) {
 			.status(201)
 			.json({ message: 'Product created successfully', product: response });
 	} catch (error) {
-		console.error('Error creating product:', error);
-		res.status(500).json({ error: 'Internal server error' });
+		sendError(res, 'Error occured while trying to create product', 500);
 	}
 }
 
@@ -44,7 +44,9 @@ async function deleteProduct(req, res) {
 			.status(200)
 			.json({ message: 'Product deleted successfully', product: response });
 	} catch (error) {
-		res.status(501).json({ error: 'Internal server error' });
+		sendError(res, 'Error occured while trying to delete product', 500);
+
+		// res.status(501).json({ error: 'Internal server error' });
 	}
 }
 async function getProduct(req, res) {
@@ -57,12 +59,10 @@ async function getProduct(req, res) {
 		return res.status(200).json({ product: response });
 	} catch (error) {
 		console.log(error);
-		res.status(501).json({ error: 'Internal server error' });
 		if (error.message === 'Product not found') {
 			return res.status(404).json({ error: 'Product not found' });
 		}
-
-		res.status(500).json({ error: 'Internal server error' });
+		sendError(res, 'Error occured while trying to get product', 500);
 	}
 }
 async function getProducts(req, res) {
@@ -91,8 +91,7 @@ async function getProducts(req, res) {
 		};
 		res.status(200).json(response);
 	} catch (error) {
-		console.error('Error getting products:', error);
-		res.status(500).json({ error: 'Internal server error' });
+		sendError(res, 'Error occured while trying to get product', 500);
 	}
 }
 async function updateProduct(req, res) {
@@ -116,8 +115,7 @@ async function updateProduct(req, res) {
 
 		return res.status(200).json(updatedProduct);
 	} catch (error) {
-		console.error('Error updating product:', error);
-		res.status(500).json({ error: 'Internal server error' });
+		sendError(res, 'Error occured while trying to update product', 500);
 	}
 }
 

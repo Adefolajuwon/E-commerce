@@ -12,7 +12,3 @@ module.exports.sendError = function (res, message, statusCode) {
 		message: message || 'Error occurred. Please try again later.',
 	});
 };
-
-module.exports.home = async function (req, res) {
-	return this.sendSuccess(res, 'Welcome to Lendsqr API.');
-};
