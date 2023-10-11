@@ -3,6 +3,7 @@ const {
 	removeProductById,
 	getProductById,
 	updateProductById,
+	getAllProducts,
 } = require('../models/productModel');
 const { body, validationResult } = require('express-validator');
 
@@ -64,6 +65,36 @@ async function getProduct(req, res) {
 		res.status(500).json({ error: 'Internal server error' });
 	}
 }
+async function getProducts(req, res) {
+	const { page, limit, sort } = req.query;
+	const parsedLimit = parseInt(limit);
+	const parsedPage = parseInt(page);
+	const startIndex = (parsedPage - 1) * parsedLimit;
+	const endIndex = parsedLimit * parsedPage;
+
+	try {
+		const productsQuery = getAllProducts()
+			.skip(startIndex)
+			.limit(parsedLimit)
+			.sort(sort);
+
+		const products = await productsQuery.exec();
+
+		const response = {
+			pagination: {
+				currentPage: parsedPage,
+				perPage: parsedLimit,
+				totalPages: Math.ceil(totalDocuments / parsedLimit),
+				totalDocuments: totalDocuments,
+			},
+			products: products,
+		};
+		res.status(200).json(response);
+	} catch (error) {
+		console.error('Error getting products:', error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+}
 async function updateProduct(req, res) {
 	try {
 		const { productId } = req.params;
@@ -90,5 +121,21 @@ async function updateProduct(req, res) {
 	}
 }
 
-async function getUserProducts(req, res) {}
-module.exports = { createProduct, deleteProduct, getProduct, updateProduct };
+async function getUserProducts(req, res) {
+	try {
+		const product = await getUserProductByUserId(req.user);
+		if (!product) res.status(404).json({ message: 'No products found' });
+		return res.status(200).json(product);
+	} catch (error) {
+		console.error('Error updating product:', error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+}
+
+module.exports = {
+	createProduct,
+	deleteProduct,
+	getProduct,
+	updateProduct,
+	getProducts,
+};

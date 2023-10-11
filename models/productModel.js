@@ -57,14 +57,40 @@ async function updateProductById(id, data) {
 		throw error;
 	}
 }
-async function getAllUserProducts(id) {
+async function getAllProducts() {
 	try {
-		const response = await Product.where().equals();
-	} catch (error) {}
+		const response = await Product.find();
+		return response;
+	} catch (error) {
+		console.error('Error getting products:', error);
+		throw error;
+	}
 }
+async function getUserProductByUserId(userId) {
+	try {
+		const response = await Product.find({ user: userId });
+		return response;
+	} catch (error) {
+		console.error('Error getting user products:', error);
+		throw error;
+	}
+}
+
+async function getAllUserProducts() {
+	try {
+		const response = await Product.find();
+		return response;
+	} catch (error) {
+		console.error('Error getting all user products:', error);
+		throw error;
+	}
+}
+
 module.exports = {
 	storeProduct,
 	removeProductById,
 	getProductById,
 	updateProductById,
+	getAllProducts,
+	getUserProductByUserId,
 };
