@@ -1,0 +1,18 @@
+module.exports.sendSuccess = function (res, message, data) {
+	return res.status(200).json({
+		success: true,
+		message: message || 'Success.',
+		data: data || {},
+	});
+};
+
+module.exports.sendError = function (res, message, statusCode) {
+	return res.status(statusCode || 500).json({
+		success: false,
+		message: message || 'Error occurred. Please try again later.',
+	});
+};
+
+module.exports.home = async function (req, res) {
+	return this.sendSuccess(res, 'Welcome to Lendsqr API.');
+};
