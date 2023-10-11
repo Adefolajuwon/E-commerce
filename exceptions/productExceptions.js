@@ -4,3 +4,4 @@ class OutOfStockError extends Error {
 		this.name = 'OutOfStockError';
 	}
 }
+module.exports = { OutOfStockError };

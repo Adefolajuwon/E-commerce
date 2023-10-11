@@ -4,11 +4,13 @@ const {
 	getProductById,
 	updateProductById,
 	getAllProducts,
+	getUserProductByUserId,
 } = require('../models/productModel');
 const { sendSuccess, sendError } = require('./baseController');
 const { body, validationResult } = require('express-validator');
 
 const { User } = require('../schemas/userSchema');
+//CREATE A  NEW PRODUCT
 async function createProduct(req, res) {
 	try {
 		// Check for validation errors
@@ -18,7 +20,6 @@ async function createProduct(req, res) {
 		}
 
 		const { name, description, price, stockQuantity } = req.body;
-		// const userId = req.user.id;
 
 		const response = await storeProduct({
 			name,
@@ -27,28 +28,22 @@ async function createProduct(req, res) {
 			stockQuantity,
 			user: req.user.id,
 		});
-
-		res
-			.status(201)
-			.json({ message: 'Product created successfully', product: response });
+		sendSuccess(res, 'Product created successfully', response);
 	} catch (error) {
 		sendError(res, 'Error occured while trying to create product', 500);
 	}
 }
-
+//DELETE A PRODUCT
 async function deleteProduct(req, res) {
 	try {
 		const { productId } = req.params;
 		const response = await removeProductById(productId);
-		res
-			.status(200)
-			.json({ message: 'Product deleted successfully', product: response });
+		sendSuccess(res, 'Product deleted successfully', response);
 	} catch (error) {
 		sendError(res, 'Error occured while trying to delete product', 500);
-
-		// res.status(501).json({ error: 'Internal server error' });
 	}
 }
+//GET A PRODUCT BY ID
 async function getProduct(req, res) {
 	try {
 		const { productId } = req.params;
@@ -65,6 +60,7 @@ async function getProduct(req, res) {
 		sendError(res, 'Error occured while trying to get product', 500);
 	}
 }
+//GET ALL PRODUCTS
 async function getProducts(req, res) {
 	const { page, limit, sort } = req.query;
 	const parsedLimit = parseInt(limit);
@@ -94,6 +90,7 @@ async function getProducts(req, res) {
 		sendError(res, 'Error occured while trying to get product', 500);
 	}
 }
+//UPDATE A PRODUCT
 async function updateProduct(req, res) {
 	try {
 		const { productId } = req.params;
@@ -118,15 +115,20 @@ async function updateProduct(req, res) {
 		sendError(res, 'Error occured while trying to update product', 500);
 	}
 }
-
+//GET A USER PRODUCTS
 async function getUserProducts(req, res) {
 	try {
-		const product = await getUserProductByUserId(req.user);
-		if (!product) res.status(404).json({ message: 'No products found' });
-		return res.status(200).json(product);
+		const userId = req.user.id;
+		const products = await getUserProductByUserId(userId);
+
+		if (products.length === 0) {
+			return res.status(404).json({ message: 'No products found' });
+		}
+
+		return res.status(200).json(products);
 	} catch (error) {
-		console.error('Error updating product:', error);
-		res.status(500).json({ error: 'Internal server error' });
+		console.error('Error fetching user products:', error);
+		return res.status(500).json({ error: 'Internal server error' });
 	}
 }
 
@@ -136,4 +138,5 @@ module.exports = {
 	getProduct,
 	updateProduct,
 	getProducts,
+	getUserProducts,
 };
