@@ -11,9 +11,8 @@ const fetchUser = async (req, res, next) => {
 	const token = auth.split(' ')[1];
 	try {
 		const payload = jwt.verify(token, JWT_SECRET);
-		// Assuming your user data is stored in `payload.user`
 		req.user = payload.user;
-		console.log(req.user); // This should now log the user data
+		console.log(req.user);
 		next();
 	} catch (error) {
 		console.error(error);
