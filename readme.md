@@ -1,3 +1,6 @@
+install necessary dependencies - npm install
+start server- npm install
+
 ## Routes
 
 ## Product
