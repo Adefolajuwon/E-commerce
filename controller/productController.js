@@ -115,7 +115,6 @@ async function getUserProducts(req, res) {
 		sendSuccess(res, 'Success', products);
 	} catch (error) {
 		sendError(res, 'Error occured while trying to get products');
-		// console.error('Error fetching user products:', error);
 	}
 }
 
