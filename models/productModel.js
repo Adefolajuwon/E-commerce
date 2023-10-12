@@ -59,7 +59,7 @@ async function updateProductById(id, data) {
 }
 async function getAllProducts() {
 	try {
-		const response = await Product.find();
+		const response = await Product.find({});
 		return response;
 	} catch (error) {
 		console.error('Error getting products:', error);

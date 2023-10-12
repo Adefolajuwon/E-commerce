@@ -10,6 +10,7 @@ const { sendSuccess, sendError } = require('./baseController');
 const { body, validationResult } = require('express-validator');
 
 const { User } = require('../schemas/userSchema');
+const Product = require('../schemas/productSchema');
 //CREATE A  NEW PRODUCT
 async function createProduct(req, res) {
 	try {
@@ -62,31 +63,17 @@ async function getProduct(req, res) {
 }
 //GET ALL PRODUCTS
 async function getProducts(req, res) {
-	const { page, limit, sort } = req.query;
-	const parsedLimit = parseInt(limit);
-	const parsedPage = parseInt(page);
-	const startIndex = (parsedPage - 1) * parsedLimit;
-	const endIndex = parsedLimit * parsedPage;
-
 	try {
-		const productsQuery = getAllProducts()
-			.skip(startIndex)
-			.limit(parsedLimit)
-			.sort(sort);
+		const products = await Product.find({});
 
-		const products = await productsQuery.exec();
+		const response = products;
+		if (!response) {
+			sendError(res, 'There are products available right now', 404);
+		}
 
-		const response = {
-			pagination: {
-				currentPage: parsedPage,
-				perPage: parsedLimit,
-				totalPages: Math.ceil(totalDocuments / parsedLimit),
-				totalDocuments: totalDocuments,
-			},
-			products: products,
-		};
 		res.status(200).json(response);
 	} catch (error) {
+		console.log(error);
 		sendError(res, 'Error occured while trying to get product', 500);
 	}
 }
@@ -122,13 +109,13 @@ async function getUserProducts(req, res) {
 		const products = await getUserProductByUserId(userId);
 
 		if (products.length === 0) {
-			return res.status(404).json({ message: 'No products found' });
+			sendError(res, 'No products available', 404);
+			// return res.status(404).json({ message: 'No products found' });
 		}
-
-		return res.status(200).json(products);
+		sendSuccess(res, 'Success', products);
 	} catch (error) {
-		console.error('Error fetching user products:', error);
-		return res.status(500).json({ error: 'Internal server error' });
+		sendError(res, 'Error occured while trying to get products');
+		// console.error('Error fetching user products:', error);
 	}
 }
 

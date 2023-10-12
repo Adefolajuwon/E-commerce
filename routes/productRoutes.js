@@ -4,6 +4,7 @@ const {
 	createProduct,
 	deleteProduct,
 	updateProduct,
+	getProducts,
 	getProduct,
 } = require('../controller/productController');
 const { productValidation } = require('../validation/productValidations');
@@ -12,7 +13,7 @@ let productRouter = express.Router();
 productRouter.use(fetchUser);
 
 productRouter.post('/product', productValidation, createProduct);
-productRouter.get('/all-product');
+productRouter.get('/all-product', getProducts);
 productRouter.get('/product/:productId', getProduct);
 productRouter.delete('/product/:productId', deleteProduct);
 productRouter.get('/user-product', getUserProductByUserId);
