@@ -15,9 +15,7 @@ app.use(
 		origin: '*',
 	})
 );
-// app.use('/setauthtoken', (req, res) => {
-// 	res.send('welcome');
-// });
+
 app.use('/api/auth', authRouter);
 app.use('/api', productRouter);
 

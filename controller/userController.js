@@ -23,7 +23,7 @@ async function controllerAuthGoogle(req, res, next) {
 		};
 
 		const token = jwt.sign(payload, process.env.JWT_SECRET, {
-			expiresIn: '7d',
+			expiresIn: '3h',
 		});
 
 		return res.redirect(`http://localhost:8000/setauthtoken/${token}`);

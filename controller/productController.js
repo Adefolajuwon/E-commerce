@@ -110,7 +110,6 @@ async function getUserProducts(req, res) {
 
 		if (products.length === 0) {
 			sendError(res, 'No products available', 404);
-			// return res.status(404).json({ message: 'No products found' });
 		}
 		sendSuccess(res, 'Success', products);
 	} catch (error) {
