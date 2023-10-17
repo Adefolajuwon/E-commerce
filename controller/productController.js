@@ -21,7 +21,6 @@ async function createProduct(req, res) {
 		}
 
 		const { name, description, price, stockQuantity } = req.body;
-
 		const response = await storeProduct({
 			name,
 			description,
@@ -31,7 +30,7 @@ async function createProduct(req, res) {
 		});
 		sendSuccess(res, 'Product created successfully', response);
 	} catch (error) {
-		sendError(res, 'Error occured while trying to create product', 500);
+		sendError(res, 'Error occured while trying to create product', 501);
 	}
 }
 //DELETE A PRODUCT
